@@ -35,9 +35,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/index', function () {return view('backend.index');})->name("admin.post.index");
 
         Route::get('/add', function () {return view('backend.post.add');})->name("admin.post.add");
+        Route::get('/store', function () {})->name("admin.post.store");
 
         Route::get('/edit', function () {return view('backend.post.edit');})->name("admin.post.edit");
-
+        Route::post('/update/{id}', function () {})->name("admin.tags.update");
         Route::get('/delete', function () {})->name("admin.post.delete");
     });
     //Catgeory
@@ -47,6 +48,7 @@ Route::prefix('admin')->group(function () {
 
         
         Route::get('/add', function () {return view('backend.category.edit');})->name("admin.category.add");
+        Route::get('/store', function () {return view('backend.category.edit');})->name("admin.category.store");
 
         Route::get('/edit', function () {return view('backend.category.edit');})->name("admin.category.edit");
 
@@ -59,10 +61,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/index', function () {return view('backend.tags.index');})->name("admin.tags.index");
 
         Route::get('/add', function () {return view('backend.tags.edit');})->name("admin.tags.add");
+        Route::get('/store', function () {return view('backend.tags.edit');})->name("admin.tags.store");
 
         Route::get('/edit', function () {return view('backend.tags.edit');})->name("admin.tags.edit");
-
-        Route::get('/delete', function () {})->name("admin.category.delete");
+        Route::post('/update/{id}', function () {})->name("admin.tags.update");
+        Route::get('/delete', function () {})->name("admin.tags.delete");
     });
 
         Route::prefix('media/')->group(function () {
