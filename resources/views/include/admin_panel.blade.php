@@ -33,28 +33,28 @@
     <nav class="nav flex-column">
 
         <a href={{ route('admin.dashboard') }} class="nav-link active">
-            <span class="me-2">▣</span>
+            <span class="me-2"><i class="bi bi-bar-chart-line"></i></span>
             Dashboard
         </a>
 
-        <a href="" class="nav-link">
+        <a href={{ route('admin.post.index') }} class="nav-link">
             <span class="me-2"><i class="bi bi-person-lines-fill"></i></span>
-            Contacts
+            Posts
         </a>
 
-        <a href="" class="nav-link">
+        <a href={{ route('admin.media.index') }} class="nav-link">
+            <span class="me-2"><i class="bi bi-collection-fill"></i></span>
+            Media
+        </a>
+
+        <a href={{ route('admin.category.index') }}  class="nav-link">
             <span class="me-2"><i class="bi bi-bookmark"></i></span>
+            Categories
+        </a>
+
+        <a href={{ route('admin.tags.index') }} class="nav-link">
+            <span class="me-2"><i class="bi bi-tags"></i></span>
             Tags
-        </a>
-
-        <a href=""  class="nav-link">
-            <span class="me-2">📦</span>
-            My Profile
-        </a>
-
-        <a href=""class="nav-link">
-            <span class="me-2"><i class="bi bi-file-earmark-fill"></i></span>
-            Export/Import
         </a>
 
     </nav>
