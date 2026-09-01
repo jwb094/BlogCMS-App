@@ -3,3 +3,7 @@
 </div>
 
 @extends('layouts.frontend-layout')
+@section('title','Search -')
+@section('content')
+
+@endsection

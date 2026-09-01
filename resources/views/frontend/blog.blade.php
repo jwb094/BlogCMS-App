@@ -3,3 +3,7 @@
 </div>
 
 @extends('layouts.frontend-layout')
+@section('title','Blog -')
+@section('content')
+
+@endsection

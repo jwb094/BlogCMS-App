@@ -4,3 +4,7 @@
 <h1>GGG</h1>
 
 @extends('layouts.frontend-layout')
+@section('title','Home -')
+@section('content')
+
+@endsection
