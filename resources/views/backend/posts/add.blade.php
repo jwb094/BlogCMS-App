@@ -2,3 +2,7 @@
     <!-- Walk as if you are kissing the Earth with your feet. - Thich Nhat Hanh -->
 </div>
 @extends('layouts.backend-layout')
+@section('title','Post - New Post')
+@section('content')
+
+@endsection

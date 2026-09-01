@@ -1,6 +1,5 @@
-
 @extends('layouts.backend-layout')
-@section('title','Tags - Edit Tag')
+@section('title','Profile Details')
 @section('content')
 
 @endsection
