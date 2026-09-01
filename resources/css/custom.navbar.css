@@ -1,0 +1,31 @@
+/* ========================================
+   Custom Application Styles
+   ======================================== */
+
+
+/* Navbar */
+.navbar {
+    background-color: #000;
+}
+
+
+/* Navbar links */
+.navbar .nav-link {
+    color: #fff;
+}
+
+
+/* Navbar brand */
+.navbar .navbar-brand {
+    color: #fff;
+}
+
+
+/* Navbar link hover */
+.navbar .nav-link:hover {
+    color: #ccc;
+}
+
+ .collapse{
+    visibility: unset;
+ }
