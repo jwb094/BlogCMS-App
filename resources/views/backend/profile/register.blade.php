@@ -1,5 +1,5 @@
 @extends('layouts.frontend-layout')
-@section('title','Tags - New Tag')
+@section('title','Register ')
 @section('content')
 
 @endsection
