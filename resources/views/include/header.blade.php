@@ -39,7 +39,7 @@
     <div class="container">
 
         <a class="navbar-brand" href="#">
-            MyApp
+            BlogSpot
         </a>
 
         <button
@@ -60,19 +60,24 @@
 
                 <li class="nav-item">
                     <a class="nav-link active" href="#">
-                        Dashboard
+                        Categories
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        Contacts
+                        Search
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        Reports
+                        About Us
+                    </a>
+                </li>
+                     <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        Contact Us
                     </a>
                 </li>
 

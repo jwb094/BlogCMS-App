@@ -1,9 +1,15 @@
-<div>
-    <!-- Order your soul. Reduce your wants. - Augustine -->
-</div>
-
 @extends('layouts.frontend-default-layout')
 @section('title','Search -')
 @section('content')
+<div class="container">
+    <!-- Content here -->
 
+    <div class="container text-center">
+        <div class="row align-items-start">
+            <div class="col-12 col-md-12">
+                <h1>GGG</h1>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
