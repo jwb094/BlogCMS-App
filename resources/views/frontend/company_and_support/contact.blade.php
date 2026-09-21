@@ -1,5 +1,5 @@
 @extends('layouts.frontend-default-layout')
-@section('title','Search -')
+@section('title','Contact Us')
 @section('content')
 <div class="container">
     <!-- Content here -->

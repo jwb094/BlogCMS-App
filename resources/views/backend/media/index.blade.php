@@ -2,3 +2,7 @@
     <!-- I have not failed. I've just found 10,000 ways that won't work. - Thomas Edison -->
 </div>
 @extends('layouts.backend-layout')
+@section('title','Media - Dashboard')
+@section('content')
+
+@endsection

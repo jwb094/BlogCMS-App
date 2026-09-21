@@ -1,5 +1,5 @@
 @extends('layouts.frontend-layout')
-@section('title','Signin')
+@section('title','Editor Signin')
 @section('content')
 
 @endsection
