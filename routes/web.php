@@ -12,7 +12,7 @@ use App\Http\Controllers\Public\CompanyController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\SearchController;
-
+use App\Http\Controllers\Public\UserController as PublicUserController;
 // use App\Http\Controllers\Public\SearchController;
 
 
@@ -37,6 +37,12 @@ Route::get('/privacy',function(){
      return view('frontend.company_and_support.privacy');
 });
 
+Route::get('/login',[PublicUserController::class,'login'])->name("admin.profile.login");
+Route::post('/sign', [PublicUserController::class,'signin'])->name("admin.profile.login");
+Route::post('/register',[PublicUserController::class,'register'])->name("admin.profile.login");
+Route::post('/store', [PublicUserController::class,'store'])->name("admin.profile.login");
+
+
 //Admin - Backend
 Route::prefix('admin')->group(function () {
 
@@ -45,10 +51,9 @@ Route::prefix('admin')->group(function () {
     //     Route::get('/signin', function () {
     //         return view('backend.post.add');
     //     })->name("admin.profile.signin");
-    //     Route::post('/login', function () {})->name("admin.profile.login");
-    //     Route::get('/register', function () {
-    //         return view('backend.post.edit');
-    //     })->name("admin.profile.register");
+      //   Route::post('/login', function () {})->name("admin.profile.login");
+      //   Route::get('/register', function () {
+            return view('backend.post.edit');     })->name("admin.profile.register");
     //     Route::post('/store', function () {})->name("admin.profile.store");
 
     //     Route::get('/profile', function () {
