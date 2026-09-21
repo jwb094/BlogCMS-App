@@ -4,15 +4,14 @@
 
     <div class="d-flex align-items-center justify-content-between mb-4">
 
-        <a href="#" class="text-white text-decoration-none fs-4 fw-bold">
-            Admin Panel
-        </a>
+            <span class="text-white text-decoration-none fs-4 fw-bold">
+     Admin Panel
+            </span>
+       
 
-        <button {{-- type="button"
-            class="btn btn-outline-light sidebar-close"
-            id="sidebarClose"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close navigation" --}} class="btn btn-outline-light sidebar-close" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Toggle navigation">
+
+        <button 
+            class="btn btn-outline-light sidebar-close" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Toggle navigation">
             &times;
         </button>
 
@@ -39,7 +38,7 @@
             class="nav-link"
             @endif
             >
-            <span class="me-2"><i class="bi bi-person-lines-fill"></i></span>
+            <span class="me-2"><i class="bi bi-collection-fill"></i></span>
             Posts
         </a>
 
@@ -48,7 +47,8 @@
             @else
             class="nav-link"
             @endif>
-            <span class="me-2"><i class="bi bi-collection-fill"></i></span>
+            <span class="me-2">
+            <i class="bi bi-image-fill"></i></span>
             Media
         </a>
 
@@ -81,7 +81,7 @@
             class="nav-link"
             @endif
         >
-            <span class="me-2"><i class="bi bi-tags"></i></span>
+            <span class="me-2"><i class="bi bi-person-circle"></i></span>
             Profile
         </a>
 
