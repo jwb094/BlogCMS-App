@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Public;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ContactController extends Controller
+class CategoryController extends Controller
 {
-    //
-        /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('backend.category.index');
     }
 
     /**
@@ -21,7 +20,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.category.create');
     }
 
     /**
@@ -45,7 +44,7 @@ class ContactController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('backend.category.edit');
     }
 
     /**
