@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 
+#[Fillable(['post_id','tag_id'])]
 class PostTag extends Model
 {
     //
