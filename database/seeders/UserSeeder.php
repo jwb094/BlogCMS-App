@@ -14,21 +14,21 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        //     User::create([
-        //     'name' => 'Admin User',
-        //     'email' => 'admin@example.com',
-        //     'password' => Hash::make('password'),
-        //     'role' => 'admin',
-        //     'email_verified_at' => now(),
-        // ]);
+            User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+            'email_verified_at' => now(),
+        ]);
 
-        // User::create([
-        //     'name' => 'Author User',
-        //     'email' => 'author@example.com',
-        //     'password' => Hash::make('password'),
-        //     'role' => 'author',
-        //     'email_verified_at' => now(),
-        // ]);
+        User::create([
+            'name' => 'Author User',
+            'email' => 'author@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'author',
+            'email_verified_at' => now(),
+        ]);
 
         User::factory()
             ->count(8)
