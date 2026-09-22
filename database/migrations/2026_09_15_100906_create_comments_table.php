@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-
-            $table->string('name');
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
             $table->text('content');
             $table->enum('status', ['approval', 'reject']);
             $table->string('ip_address');
             $table->foreignId('user_id')
                 ->constrained('users')
-                ->cascadeOnDelete();
+                ->cascadeOnDelete()->nullable();
             $table->foreignId('post_id')
                 ->constrained('posts')
                 ->cascadeOnDelete();
