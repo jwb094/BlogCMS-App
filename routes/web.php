@@ -37,10 +37,14 @@ Route::get('/privacy', function () {
     return view('frontend.company_and_support.privacy');
 });
 
-Route::get('/login', [PublicUserController::class, 'login'])->name("admin.profile.login");
-Route::post('/sign', [PublicUserController::class, 'signin'])->name("admin.profile.login");
-Route::post('/register', [PublicUserController::class, 'register'])->name("admin.profile.login");
-Route::post('/store', [PublicUserController::class, 'store'])->name("admin.profile.login");
+Route::get('/login', [PublicUserController::class, 'login'])
+        ->name('profile.login');
+Route::post('/sign', [PublicUserController::class, 'signin'])
+        ->name('profile.signin');
+Route::get('/register', [PublicUserController::class, 'register'])
+        ->name('profile.register');
+Route::post('/store', [PublicUserController::class, 'store'])
+        ->name('profile.store');
 
 
 //Admin - Backend
