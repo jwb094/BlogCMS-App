@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Post extends Model
 {
     //
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
 
 
@@ -52,7 +52,10 @@ class Post extends Model
 
     public function tags()
     {
-        return $this->hasMany(PostTag::class, 'post_id');
+        return $this->belongsToMany(
+            Tag::class,
+            'post_tags'
+        );
     }
 
     public function secondarycategories()
