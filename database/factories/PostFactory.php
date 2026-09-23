@@ -30,10 +30,13 @@ class PostFactory extends Factory
 
             'status' => fake()->randomElement([
                 'draft',
-                'published',
+                'live',
+                'scheduled',
             ]),
 
-            'allow_comments' => fake()->boolean(80),
+            'allow_comments' => fake()->boolean(80)
+                ? 'allow'
+                : 'forbidden',
 
             'featured_image' => fake()->optional()->imageUrl(
                 1200,
@@ -42,20 +45,15 @@ class PostFactory extends Factory
             ),
 
             'featured_image_caption' => fake()->optional()->sentence(10),
-
             'content' => fake()->paragraphs(10, true),
-
             'meta_title' => $title,
             'meta_description' => fake()->sentence(20),
-
-            'user_id' => User::factory(),
-            'category_id' => Category::factory(),
-
+            'user_id' => User::query()->inRandomOrder()->value('id'),
+            'category_id' => Category::query()->inRandomOrder()->value('id'),
             'published_at' => fake()->optional()->dateTimeBetween(
-                '-1 year',
+                '-2 year',
                 'now'
             ),
-
             'deleted_at' => null,
         ];
     }
