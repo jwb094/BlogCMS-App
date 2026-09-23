@@ -29,9 +29,13 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->foreignId('category_id')
                 ->constrained('categories')
-                ->cascadeOnDelete();
-            $table->timestamp('published_at');
-            $table->timestamp('deleted_at');
+                ->restrictOnDelete();
+            //published_at
+            $table->timestamp('published_at')->nullable();
+            //delete_at
+            $table->softDeletes();
+            //created_at && updated_at
+            $table->timestamps();
         });
     }
 

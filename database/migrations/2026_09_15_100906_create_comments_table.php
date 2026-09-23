@@ -16,11 +16,12 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->text('content');
-            $table->enum('status', ['approval', 'reject']);
+            $table->enum('status', [ 'pending', 'approved', 'rejected' ]);
             $table->string('ip_address');
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
-                ->cascadeOnDelete()->nullable();
+                ->nullOnDelete();
             $table->foreignId('post_id')
                 ->constrained('posts')
                 ->cascadeOnDelete();
