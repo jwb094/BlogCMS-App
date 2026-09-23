@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-            User::create([
+            User::updateOrCreate([
             'name' => 'Admin User',
             'first_name' => fake()->name(),
             'last_name' => fake()->name(),
@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        User::create([
+        User::updateOrCreate([
             'name' => 'Author User',
             'first_name' => fake()->name(),
             'last_name' => fake()->name(),
