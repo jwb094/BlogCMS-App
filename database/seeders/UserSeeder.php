@@ -14,10 +14,10 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-            User::updateOrCreate([
+        User::updateOrCreate([
             'name' => 'Admin User',
-            'first_name' => fake()->name(),
-            'last_name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
             'role' => 'admin',
@@ -26,8 +26,8 @@ class UserSeeder extends Seeder
 
         User::updateOrCreate([
             'name' => 'Author User',
-            'first_name' => fake()->name(),
-            'last_name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'email' => 'author@example.com',
             'password' => Hash::make('password'),
             'role' => 'author',
