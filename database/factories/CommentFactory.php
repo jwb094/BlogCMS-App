@@ -20,7 +20,7 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-                 'post_id' => Post::factory(),
+            'post_id' => Post::factory(),
 
             'user_id' => fake()->boolean(70)
                 ? User::factory()
@@ -36,6 +36,8 @@ class CommentFactory extends Factory
                 'approved',
                 'rejected',
             ]),
+
+            'ip_address' => fake()->ipv4(),
         ];
     }
 }
