@@ -15,8 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('meta_title');
-            $table->string('meta_description');
+            $table->string('description')->unique();
+            //SEO 
+            $table->string('meta_title')->nullable();
+            $table->string('meta_description')->nullable();
+
+            // Management
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

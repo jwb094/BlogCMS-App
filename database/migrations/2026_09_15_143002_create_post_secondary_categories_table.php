@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('post_secondary_categories', function (Blueprint $table) {
             $table->id();
-                $table->foreignId('user_id')
-                ->constrained('users')
+                $table->foreignId('post_id')
+                ->constrained('posts')
                 ->cascadeOnDelete();
             $table->foreignId('category_id')
                 ->constrained('categories')

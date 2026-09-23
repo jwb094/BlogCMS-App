@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->string('description')->unique();
+            //SEO
             $table->string('meta_title');
             $table->string('meta_description');
+
             $table->timestamps();
         });
     }
