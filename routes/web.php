@@ -41,6 +41,10 @@ Route::get('/login', [PublicUserController::class, 'login'])
         ->name('profile.login');
 Route::post('/sign', [PublicUserController::class, 'signin'])
         ->name('profile.signin');
+Route::get('/user_reset_password', [PublicUserController::class, 'user_reset_password'])
+        ->name('profile.reset_password');
+Route::post('/reset_password', [PublicUserController::class, 'reset_password'])
+        ->name('profile.reset');
 Route::get('/register', [PublicUserController::class, 'register'])
         ->name('profile.register');
 Route::post('/store', [PublicUserController::class, 'store'])
