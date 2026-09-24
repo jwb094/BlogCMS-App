@@ -50,19 +50,6 @@ Route::get('/register', [PublicUserController::class, 'register'])
 Route::post('/store', [PublicUserController::class, 'store'])
     ->name('profile.store');
 
-// //Verification notice
-// Route::get('/email/verify', function () {
-//     return view('auth.verify-email');
-// })->middleware('auth')->name('verification.notice');
-
-// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//     $request->fulfill();
-//     return redirect()->route('admin.dashboard');
-// })->middleware([
-//     'auth',
-//     'signed',
-//     'throttle:6,1',
-// ])->name('verification.verify');
 
 Route::middleware('auth')->group(function () {
 
@@ -116,12 +103,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::resource('profile', UserController::class)
         ->names('admin.profile');
-        // ->only(['edit', 'update', 'destroy']);
     Route::prefix('profile')->group(function () {
-        // Route::get('/profile', [UserController::class, 'profile'])
-        //     ->name('admin.profile');
-        // Route::get('/profile', [UserController::class, 'profile'])
-        //     ->name('admin.profile.update');
 
         Route::post('logout', [UserController::class, 'logout'])
             ->name('admin.profile.logout');
