@@ -1,4 +1,4 @@
-@extends('layouts.frontend-default-layout')
+@extends('layouts.frontend-auth-layout')
 @section('title','Blog - Register')
 @section('content')
 
