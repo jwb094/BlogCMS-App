@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 class UserController extends Controller
 {
     /**
@@ -69,5 +70,14 @@ class UserController extends Controller
 
     public function change_password(){
         
+    }
+
+        public function logout(){
+           // dd('hi');
+
+        Session::flush();
+        Auth::logout();
+
+        return  redirect(route('profile.login'));
     }
 }
