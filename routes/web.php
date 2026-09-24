@@ -14,10 +14,10 @@ use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\SearchController;
 use App\Http\Controllers\Public\UserController as PublicUserController;
 // use App\Http\Controllers\Public\SearchController;
-
-
-
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\EmailVerificationController;
 
 //Public - Frontend
 Route::get('/', [HomeController::class, 'index']);
@@ -46,9 +46,66 @@ Route::get('/register', [PublicUserController::class, 'register'])
 Route::post('/store', [PublicUserController::class, 'store'])
         ->name('profile.store');
 
+// //Verification notice
+// Route::get('/email/verify', function () {
+//     return view('auth.verify-email');
+// })->middleware('auth')->name('verification.notice');
+
+// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//     $request->fulfill();
+//     return redirect()->route('admin.dashboard');
+// })->middleware([
+//     'auth',
+//     'signed',
+//     'throttle:6,1',
+// ])->name('verification.verify');
+
+Route::middleware('auth')->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Email Verification
+    |--------------------------------------------------------------------------
+    */
+
+    // Display verification notice
+    Route::get('/email/verify', [
+        EmailVerificationController::class,
+        'notice',
+    ])->name('verification.notice');
+
+    // Process verification link
+    Route::get('/email/verify/{id}/{hash}', [
+        EmailVerificationController::class,
+        'verify',
+    ])
+        ->middleware([
+            'signed',
+            'throttle:6,1',
+        ])
+        ->name('verification.verify');
+
+    // Resend verification email
+    Route::post('/email/verification-notification', [
+        EmailVerificationController::class,
+        'resend',
+    ])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+});
+
+//resend route
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent.');
+})->middleware([
+    'auth',
+    'throttle:6,1',
+])->name('verification.send');
 
 //Admin - Backend
-Route::prefix('admin')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     //Profile
 
@@ -59,6 +116,9 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/profile', [UserController::class, 'profile'])
             ->name('admin.profile');
+
+             Route::get('logout', [UserController::class, 'logout'])
+            ->name('admin.profile.logout');
 
 
         Route::get('/change_password', [UserController::class, 'change_password'])
