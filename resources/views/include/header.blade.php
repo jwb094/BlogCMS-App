@@ -83,7 +83,7 @@
 
             </ul>
 
-            <ul class="navbar-nav">
+            {{-- <ul class="navbar-nav">
 
                 <li class="nav-item dropdown">
 
@@ -119,7 +119,7 @@
 
                 </li>
 
-            </ul>
+            </ul> --}}
 
         </div>
 
