@@ -90,7 +90,7 @@
             <a
                 href="#"
                 class="nav-link dropdown-toggle
-                    {{ request()->routeIs('admin.profile', 'admin.profile.password') ? 'active' : '' }}"
+                    {{ request()->routeIs('admin.profile.*', 'admin.profile.password') ? 'active' : '' }}"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -106,8 +106,8 @@
                 <!-- Update Profile -->
                 <li>
                     <a
-                        class="dropdown-item {{ request()->routeIs('admin.profile') ? 'active' : '' }}"
-                        href="{{ route('admin.profile') }}"
+                        class="dropdown-item {{ request()->routeIs('admin.profile.edit') ? 'active' : '' }}"
+                        href="{{ route('admin.profile.edit',auth()->user()->id) }}"
                     >
                         <i class="bi bi-person me-2"></i>
                         Update Profile
@@ -117,8 +117,8 @@
                 <!-- Change Password -->
                 <li>
                     <a
-                        class="dropdown-item {{ request()->routeIs('admin.profile.password') ? 'active' : '' }}"
-                        href="{{ route('admin.profile.password') }}"
+                        class="dropdown-item {{ request()->routeIs('admin.profile.password_change') ? 'active' : '' }}"
+                        href="{{ route('admin.profile.password_change',auth()->user()->id) }}"
                     >
                         <i class="bi bi-key me-2"></i>
                         Change Password
