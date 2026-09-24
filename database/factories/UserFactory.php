@@ -26,12 +26,22 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'first_name' => fake()->name(),
-            'last_name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'instagram' => fake()->optional(0.7)->userName(),
+            'facebook' => fake()->optional(0.7)->userName(),
+            'linkedin' => fake()->optional(0.7)->userName(),
+            'twitter' => fake()->optional(0.7)->userName(),
+            'profile_photo' => fake()->optional(0.5)->imageUrl(
+                400,
+                400,
+                'people'
+            ),
+            'bio' => fake()->optional(0.8)->paragraph(3),
         ];
     }
 
