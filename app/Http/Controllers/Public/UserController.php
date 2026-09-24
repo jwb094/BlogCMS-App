@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserFormRequest;
 use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserResetPasswordRequest;
 use App\Services\PublicService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -27,8 +28,9 @@ class UserController extends Controller
 
         return view('frontend.auth.login');
     }
-    public function signin(UserLoginRequest $request){
-       // $loginCredentials = $request->validated();
+    public function signin(UserLoginRequest $request)
+    {
+        // $loginCredentials = $request->validated();
 
         //$authenciated = $this->userService->userAuth($loginCredentials);
 
@@ -69,5 +71,23 @@ class UserController extends Controller
         return  redirect(route('profile.login'))
             ->with('status', true)
             ->with('message', "Registration successfully");;
+    }
+
+
+    public function  user_reset_password()
+    {
+
+        return view('frontend.auth.password_reset');
+    }
+
+    public function reset_password(UserResetPasswordRequest $request) {
+   // dd($request->validated());
+        
+        $this->userService->resetUserPassword(
+            $request->validated()
+        );
+     
+        return  redirect(route('profile.login'))
+            ->with('message', "Password Reset successfully");
     }
 }
