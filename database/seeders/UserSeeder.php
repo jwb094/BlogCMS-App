@@ -32,6 +32,11 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'author',
             'email_verified_at' => now(),
+            'instagram' => fake()->optional(0.7)->userName(),
+            'facebook' => fake()->optional(0.7)->userName(),
+            'linkedin' => fake()->optional(0.7)->userName(),
+            'twitter' => fake()->optional(0.7)->userName(),
+            'bio' => fake()->optional(0.8)->paragraph(3),
         ]);
 
         User::factory()
