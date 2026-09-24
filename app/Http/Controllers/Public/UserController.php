@@ -27,19 +27,25 @@ class UserController extends Controller
 
         return view('frontend.auth.login');
     }
-    public function signin(UserLoginRequest $request)
-    {
-        $loginCredentials = $request->validated();
+    public function signin(UserLoginRequest $request){
+       // $loginCredentials = $request->validated();
 
-        $authenciated = $this->userService->userAuth($loginCredentials);
+        //$authenciated = $this->userService->userAuth($loginCredentials);
 
-        if (!$authenciated) {
-            return redirect()
-                ->intended(route('login'))
-                ->with('success', "You have successfully logged in");
+
+        if (!$this->userService->userAuth($request->validated())) {
+            return back()
+                ->withErrors([
+                    'message' => 'The provided credentials are incorrect.',
+                ]);
         }
+        // if (!$authenciated) {
+        //     return redirect()
+        //         ->intended(route('login'))
+        //         ->with('success', "You have successfully logged in");
+        // }
 
-        return  redirect(route('dashboard'))
+        return  redirect(route('admin.dashboard'))
             ->with('message', "Login successfully");
     }
     public function register()
@@ -51,23 +57,17 @@ class UserController extends Controller
 
         $newUser =  $this->userService->store($request->validated());
 
-        if (!$newUser->id) {
-            return  redirect(route('profile.register'))
-                ->with('status', false)
-                ->with('message', "Registration failed, try again please");;
-        }
+        Auth::login($newUser);
+
+        $newUser->sendEmailVerificationNotification();
+
+        // if (!$newUser->id) {
+        //     return  redirect(route('profile.register'))
+        //         ->with('status', false)
+        //         ->with('message', "Registration failed, try again please");;
+        // }
         return  redirect(route('profile.login'))
             ->with('status', true)
             ->with('message', "Registration successfully");;
-    }
-
-
-    public function logout()
-    {
-
-        Session::flush();
-        Auth::logout();
-
-        return  redirect(route('login'));
     }
 }
