@@ -8,6 +8,7 @@ class UserService{
     public function store(array $newUserData): User
     {
         $newUserData['password_hash'] = Hash::make($newUserData['password']);
+        $newUserData['role'] = 'author';
         $user = User::create($newUserData);
 
         return $user;
