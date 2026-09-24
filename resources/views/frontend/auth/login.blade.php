@@ -29,7 +29,7 @@
                 <x-form.label for="floatingPassword">Password</x-form.label>
             </div>
             <x-form.button class="btn btn-primary w-100 py-2 mt-2" type="submit">Sign in</x-form.button>
-            <a class="btn btn-primary w-100 py-2 mt-2" href={{ route('profile.register') }}>Register</a>
+            <a class="btn btn-primary w-100 py-2 mt-2" href={{ route('profile.reset_password') }}>Reset Password</a>
 
         </form>
     </section>
