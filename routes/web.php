@@ -20,12 +20,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\EmailVerificationController;
 
 //Public - Frontend
-Route::get('/', [HomeController::class, 'index']);
-Route::get('/blogs', [BlogController::class, 'blog']);
-Route::get('/blog/{id}', [BlogController::class, 'blogPost']);
-Route::get('/category/{slug}', [BlogController::class, 'blogPost']);
-Route::get('/tags/{slug}', [BlogController::class, 'blogPost']);
-Route::get('/search', [SearchController::class, 'search']);
+Route::get('/', [BlogController::class, 'index'])->name('home');
+Route::get('/blogs', [BlogController::class, 'blog'])->name('blog.archive');
+Route::get('/blog/{id}', [BlogController::class, 'blogPost'])->name('blog.post');
+Route::get('/category/{slug}', [BlogController::class, 'blogPost'])->name('blog.category');
+Route::get('/tags/{slug}', [BlogController::class, 'blogPost'])->name('blog.tag');
+Route::get('/search', [SearchController::class, 'search'])->name('blog.search');
 Route::get('/about', function () {
     return view('frontend.company_and_support.about');
 });
