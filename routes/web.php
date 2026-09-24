@@ -38,17 +38,17 @@ Route::get('/privacy', function () {
 });
 
 Route::get('/login', [PublicUserController::class, 'login'])
-        ->name('profile.login');
+    ->name('profile.login');
 Route::post('/sign', [PublicUserController::class, 'signin'])
-        ->name('profile.signin');
+    ->name('profile.signin');
 Route::get('/user_reset_password', [PublicUserController::class, 'user_reset_password'])
-        ->name('profile.reset_password');
+    ->name('profile.reset_password');
 Route::post('/reset_password', [PublicUserController::class, 'reset_password'])
-        ->name('profile.reset');
+    ->name('profile.reset');
 Route::get('/register', [PublicUserController::class, 'register'])
-        ->name('profile.register');
+    ->name('profile.register');
 Route::post('/store', [PublicUserController::class, 'store'])
-        ->name('profile.store');
+    ->name('profile.store');
 
 // //Verification notice
 // Route::get('/email/verify', function () {
@@ -113,20 +113,25 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     //Profile
 
-    Route::prefix('profile/')->group(function () {
-        Route::resource('profile', UserController::class)
-            ->names('admin.profile')
-            ->only(['edit', 'update', 'destroy']);
 
-        Route::get('/profile', [UserController::class, 'profile'])
-            ->name('admin.profile');
+    Route::resource('profile', UserController::class)
+        ->names('admin.profile');
+        // ->only(['edit', 'update', 'destroy']);
+    Route::prefix('profile')->group(function () {
+        // Route::get('/profile', [UserController::class, 'profile'])
+        //     ->name('admin.profile');
+        // Route::get('/profile', [UserController::class, 'profile'])
+        //     ->name('admin.profile.update');
 
-             Route::get('logout', [UserController::class, 'logout'])
+        Route::post('logout', [UserController::class, 'logout'])
             ->name('admin.profile.logout');
 
 
-        Route::get('/change_password', [UserController::class, 'change_password'])
-            ->name('admin.profile');
+        Route::get('/{userId}/password_change', [UserController::class, 'password_change'])
+            ->name('admin.profile.password_change');
+
+        Route::post('/password_update', [UserController::class, 'password_update'])
+            ->name('admin.profile.password_update');
     });
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name("admin.dashboard");
