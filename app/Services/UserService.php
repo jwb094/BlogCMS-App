@@ -1,9 +1,13 @@
 <?php
+
 namespace App\Services;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-class UserService{
+
+class UserService
+{
 
     public function store(array $newUserData): User
     {
@@ -30,10 +34,24 @@ class UserService{
 
         $updatedUser = User::findOrFail($updatedUserDataId);
 
-        $updatedUserData['password_hash'] = Hash::make($updatedUserData['password']);
+        $updatedUserData['password'] = Hash::make($updatedUserData['password']);
 
         $updatedUser->update($updatedUserData);
 
         return $updatedUser->refresh();
+    }
+
+
+    public function resetUserPassword(array $updatedUserData): User
+    {
+
+        $user = User::where('email', $updatedUserData['email'])
+            ->firstOrFail();
+
+        $user->update([
+            'password' => Hash::make($updatedUserData['password']),
+        ]);
+
+        return $user->refresh();
     }
 }
