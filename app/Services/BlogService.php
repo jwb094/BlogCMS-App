@@ -2,12 +2,82 @@
 
 namespace App\Services;
 
+use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Support\Str;
 
 class   BlogService
 {
+        //Category
+    /**
+     * Summary of Tag Index
+     * @param object $inputData
+     * @return array{tags: \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Pagination\LengthAwarePaginator<int, Tag>}
+     */
+    public function categoryIndex(object $inputData): array
+    {
 
+
+        $query =  Category::query();
+
+        if (!empty($inputData['name'])) {
+            $query->where(
+                'name',
+                'LIKE',
+                '%' . $inputData['name'] . '%'
+            );
+        }
+
+
+
+        $category = $query
+            ->orderBy('name', 'ASC')
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+
+
+        return [
+            "category" => $category
+        ];
+    }
+
+    /**
+     * Summary of newTag
+     * @param array $data
+     * @return Category
+     */
+    public  function newCategory(array $data): Category
+    {
+
+
+
+        $data["slug"] = Str::slug($data['name']);
+        //dd($data);
+        $newTag = Category::create($data);
+
+        return $newTag;
+    }
+
+    /**
+     * Summary of updateTag
+     * @param array $updatedCategoryData
+     * @param int $updatedCategoryDataId
+     * @return Category
+     */
+    public function updateCategory(array $updatedCategoryData, int $updatedCategoryDataId)
+    {
+        $category = Category::findOrFail($updatedCategoryDataId);
+
+
+        $updatedCategoryData["slug"] = Str::slug($updatedCategoryData['name']);
+
+
+        $category->update($updatedCategoryData);
+
+        return $category->refresh();
+    }
 
 
     //Tag
