@@ -43,6 +43,8 @@
             Media
         </a>
 
+        @if (auth()->user()->isAdmin())
+
 
         <!-- Categories -->
         <a href="{{ route('admin.category.index') }}" class="nav-link {{ request()->routeIs('admin.category.*') ? 'active' : '' }}">
@@ -60,7 +62,7 @@
             </span>
             Tags
         </a>
-
+        @endif
 
         <!-- Profile Dropdown -->
         <div class="nav-item dropdown">
