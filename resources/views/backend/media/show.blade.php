@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-12 col-md-6">
             <figure class="figure">
-                <img src="https://placehold.co/300x300" class=" figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                <img src="{{ asset('storage/' . $media->path) }}"  class=" figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
                 <figcaption class="figure-caption">{{ $media->filename }}</figcaption>
             </figure>
         </div>
