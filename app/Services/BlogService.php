@@ -4,10 +4,48 @@ namespace App\Services;
 
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\Media;
+use App\Models\Post;
 use Illuminate\Support\Str;
 
 class   BlogService
-{
+{   
+
+            //Category
+    /**
+     * Summary of Tag Index
+     * @param object $inputData
+     * @return array{tags: \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Pagination\LengthAwarePaginator<int, Tag>}
+     */
+    public function mediaIndex(object $inputData): array
+    {
+
+
+        $query =  Media::query();
+
+        if (!empty($inputData['name'])) {
+            $query->where(
+                'filename',
+                'LIKE',
+                '%' . $inputData['name'] . '%'
+            );
+        }
+
+
+
+        $media = $query
+            ->orderBy('filename', 'ASC')
+            ->latest()
+            ->paginate(9)
+            ->withQueryString();
+
+
+
+        return [
+            "media" => $media
+        ];
+    }
+
         //Category
     /**
      * Summary of Tag Index
