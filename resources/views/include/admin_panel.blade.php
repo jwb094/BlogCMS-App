@@ -34,6 +34,13 @@
             Posts
         </a>
 
+            <!-- Comments -->
+        <a href="{{ route('admin.comments.index') }}" class="nav-link {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}">
+            <span class="me-2">
+         <i class="bi bi-chat-left-text-fill"></i>
+            </span>
+            Comments
+        </a>
 
         <!-- Media -->
         <a href="{{ route('admin.media.index') }}" class="nav-link {{ request()->routeIs('admin.media.*') ? 'active' : '' }}">
