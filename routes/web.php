@@ -135,5 +135,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         ->names('admin.tags');
 
     Route::resource('media', MediaController::class)
-        ->names('admin.media');
+        ->names('admin.media')
+          ->only(['index', 'show']);
 });
