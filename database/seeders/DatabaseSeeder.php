@@ -20,13 +20,14 @@ class DatabaseSeeder extends Seeder
 
             CategorySeeder::class,
             TagSeeder::class,
-
+            
+            MediaSeeder::class,
             PostSeeder::class,
 
             PostSecondaryCategorySeeder::class,
             PostTagSeeder::class,
 
-            MediaSeeder::class,
+
             CommentSeeder::class,
         ]);
     }
