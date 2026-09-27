@@ -3,17 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Media;
+use App\Services\BlogService;
 use Illuminate\Http\Request;
 
 class MediaController extends Controller
 {
+
+    public function __construct(
+        protected BlogService $blogService
+    ) {}
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        
-    return view('backend.media.index');
+        //$media = Media::all();
+        $data = $this->blogService->mediaIndex($request);
+        return view('backend.media.index', compact('data'));
     }
 
     /**
@@ -35,9 +42,10 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Media $medium)
     {
-        return view('backend.media.show');
+        //dd($medium);
+        return view('backend.media.show',['media' => $medium]);
     }
 
     /**
