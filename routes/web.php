@@ -125,7 +125,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::resource('comments', CommentController::class)
         ->names('admin.comments')
-        ->only(['index', 'edit', 'update']);
+        ->only(['index', 'edit', 'update', 'destroy']);
 
     Route::resource('category', CategoryController::class)
         ->names('admin.category');
