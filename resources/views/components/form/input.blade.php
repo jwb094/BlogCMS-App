@@ -1,2 +1,1 @@
-<input {{ $attributes->merge(['class' => '','type'=>'','id'=>'','placeholder' =>'']) }}
->
+<input {{ $attributes }}>
