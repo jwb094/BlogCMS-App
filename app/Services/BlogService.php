@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Tag;
 use App\Models\Media;
 use App\Models\Post;
@@ -11,7 +12,24 @@ use Illuminate\Support\Str;
 class   BlogService
 {   
 
-            //Category
+    //Comment
+       /**
+     * Summary of updateTag
+     * @param array $updatedCommentData
+     * @param int $updatedCommentId
+     * @return Comment
+     */
+    public function updateCommentStatus(array $updatedCommentData, int $updatedCommentId): Comment
+    {
+        $comment = Comment::findOrFail($updatedCommentId);
+
+
+        $comment->update($updatedCommentData);
+
+        return $comment->refresh();
+    }
+
+    //Category
     /**
      * Summary of Tag Index
      * @param object $inputData
