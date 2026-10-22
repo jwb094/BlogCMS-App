@@ -35,7 +35,7 @@ Route::get('/privacy', function () {
 });
 
 Route::get('/login', [PublicUserController::class, 'login'])
-    ->name('profile.login');
+    ->name('login');
 Route::post('/sign', [PublicUserController::class, 'signin'])
     ->name('profile.signin');
 Route::get('/user_reset_password', [PublicUserController::class, 'user_reset_password'])
