@@ -97,7 +97,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <x-form.label for="published_at" class="form-label">Publish Date</x-form.label>
-                        <x-form.input id="published_at" name="published_at" type="datetime-local" class="form-control" value="{{ old('published_at', $post->published_at?->format('Y-m-d\TH:i')) }}" />
+                        <x-form.input id="published_at" name="published_at" type="datetime-local" class="form-control" value="{{ old('published_at', $post->published_at ? \Illuminate\Support\Carbon::parse($post->published_at)->format('Y-m-d\TH:i') : '') }}" />
                         @error('published_at') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
                     <div class="col-12"><hr><h2 class="h5">Search Engine Details</h2></div>
