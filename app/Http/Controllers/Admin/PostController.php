@@ -21,6 +21,33 @@ class PostController extends Controller
     }
 
     /**
+     * Display soft-deleted posts.
+     */
+    public function bin()
+    {
+        $posts = Post::onlyTrashed()
+            ->with('category')
+            ->latest('deleted_at')
+            ->paginate(10);
+
+        return view('backend.posts.bin', compact('posts'));
+    }
+
+    /**
+     * Restore a post from the recycle bin.
+     */
+    public function restore(string $postId)
+    {
+        abort_unless(auth()->user()?->isAdmin() || auth()->user()?->isAuthor(), 403);
+
+        $post = Post::onlyTrashed()->findOrFail($postId);
+        $post->restore();
+
+        return redirect()->route('admin.post.bin')
+            ->with('success', 'Post restored successfully.');
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
