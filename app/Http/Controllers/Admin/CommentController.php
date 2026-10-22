@@ -15,10 +15,18 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::query()
-            ->orderBy('created_by', 'ASC')
+        $commentsQuery = Comment::query();
+
+        if (!auth()->user()->isAdmin()) {
+            $commentsQuery->whereHas('post', function ($query): void {
+                $query->where('user_id', auth()->id());
+            });
+        }
+
+        $comments = $commentsQuery
             ->latest()
             ->paginate(9);
+
         return view('backend.comments.index', compact('comments'));
     }
 
@@ -48,6 +56,8 @@ class CommentController extends Controller
      */
     public function edit(Comment $comment)
     {
+        $this->authorizeCommentManagement($comment);
+
         return view('backend.comments.edit', compact('comment'));
     }
 
@@ -56,11 +66,13 @@ class CommentController extends Controller
      */
     public function update(BlogService $blogService, CommentFormRequest $request, Comment $comment)
     {
+        $this->authorizeCommentManagement($comment);
+
         //
         $blogService->updateCommentStatus($request->validated(), $comment->id);
 
         return redirect()->route('admin.comments.index')
-            ->with('success', "Comment Status was updated");
+            ->with('success', 'Comment Status was updated');
     }
 
     /**
@@ -68,8 +80,21 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
+        $this->authorizeCommentManagement($comment);
+
         $comment->delete();
+
         return redirect(route('admin.comments.index'))
-            ->with('Status', "Tag Record was delete");
+            ->with('Status', 'Tag Record was delete');
+    }
+
+    private function authorizeCommentManagement(Comment $comment): void
+    {
+        $user = auth()->user();
+
+        abort_unless(
+            $user?->isAdmin() || ($user?->isAuthor() && (int) $comment->post?->user_id === (int) $user->id),
+            403
+        );
     }
 }

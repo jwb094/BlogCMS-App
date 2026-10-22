@@ -4,22 +4,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Media;
-use App\Services\BlogService;
 use Illuminate\Http\Request;
 
 class MediaController extends Controller
 {
-
-    public function __construct(
-        protected BlogService $blogService
-    ) {}
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        //$media = Media::all();
-        $data = $this->blogService->mediaIndex($request);
+        $mediaQuery = Media::query();
+
+        if (!auth()->user()->isAdmin()) {
+            $mediaQuery->where('user_id', auth()->id());
+        }
+
+        if ($request->filled('name')) {
+            $mediaQuery->where('filename', 'LIKE', '%'.$request->input('name').'%');
+        }
+
+        $data = [
+            'media' => $mediaQuery
+                ->orderBy('filename', 'ASC')
+                ->latest()
+                ->paginate(9)
+                ->withQueryString(),
+        ];
+
         return view('backend.media.index', compact('data'));
     }
 
@@ -44,8 +55,13 @@ class MediaController extends Controller
      */
     public function show(Media $medium)
     {
-        //dd($medium);
-        return view('backend.media.show',['media' => $medium]);
+        abort_unless(
+            auth()->user()?->isAdmin() || (int) $medium->user_id === (int) auth()->id(),
+            403
+        );
+
+        // dd($medium);
+        return view('backend.media.show', ['media' => $medium]);
     }
 
     /**
