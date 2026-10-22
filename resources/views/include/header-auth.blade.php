@@ -15,13 +15,13 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 @if (request()->routeIs('profile.register'))
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('profile.login') }}">
+                    <a class="nav-link" href="{{ route('login') }}">
                         Login
                     </a>
                 </li>
                 @endif
 
-                @if (request()->routeIs('profile.login'))
+                @if (request()->routeIs('login'))
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('profile.register') }}">
                         Register
