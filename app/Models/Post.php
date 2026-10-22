@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
@@ -21,14 +21,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     'meta_description',
     'user_id',
     'category_id',
-    'deleted_at'
+    'published_at',
+    'deleted_at',
 ])]
 class Post extends Model
 {
     //
     use HasFactory, SoftDeletes;
-
-
 
     public function user()
     {
