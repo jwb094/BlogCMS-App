@@ -26,13 +26,23 @@
         </a>
 
 
-        <!-- Posts -->
-        <a href="{{ route('admin.post.index') }}" class="nav-link {{ request()->routeIs('admin.post.*') ? 'active' : '' }}">
-            <span class="me-2">
-                <i class="bi bi-collection-fill"></i>
-            </span>
-            Posts
-        </a>
+        <!-- Posts Dropdown -->
+        <div class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('admin.post.*') ? 'active' : '' }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="me-2">
+                    <i class="bi bi-collection-fill"></i>
+                </span>
+                Posts
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="{{ route('admin.post.index') }}" class="dropdown-item {{ request()->routeIs('admin.post.index') ? 'active' : '' }}">All Posts</a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.post.bin') }}" class="dropdown-item {{ request()->routeIs('admin.post.bin') ? 'active' : '' }}">Bin</a>
+                </li>
+            </ul>
+        </div>
 
             <!-- Comments -->
         <a href="{{ route('admin.comments.index') }}" class="nav-link {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}">
