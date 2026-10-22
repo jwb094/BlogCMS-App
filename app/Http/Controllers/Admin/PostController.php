@@ -67,7 +67,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        abort_unless(auth()->user()?->isAdmin(), 403);
+        abort_unless(auth()->user()?->isAdmin() || auth()->user()?->isAuthor(), 403);
 
         $post->delete();
 
@@ -80,7 +80,7 @@ class PostController extends Controller
      */
     public function forceDestroy(Post $post)
     {
-        abort_unless(auth()->user()?->isAdmin(), 403);
+        abort_unless(auth()->user()?->isAdmin() || auth()->user()?->isAuthor(), 403);
 
         $post->forceDelete();
 
