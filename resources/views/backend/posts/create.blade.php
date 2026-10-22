@@ -120,4 +120,29 @@
         </div>
     </form>
 </div>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const titleInput = document.getElementById('title');
+        const slugInput = document.getElementById('slug');
+        let slugWasEdited = false;
+
+        slugInput.addEventListener('input', () => {
+            slugWasEdited = true;
+        });
+
+        titleInput.addEventListener('input', () => {
+            if (slugWasEdited) {
+                return;
+            }
+
+            slugInput.value = titleInput.value
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-|-$/g, '');
+        });
+    });
+</script>
+@endpush
 @endsection
