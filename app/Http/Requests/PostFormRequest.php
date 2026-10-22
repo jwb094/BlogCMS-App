@@ -12,7 +12,7 @@ class PostFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->check();
     }
 
     /**
@@ -23,7 +23,19 @@ class PostFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', 'unique:posts,slug'],
+            'subheading' => ['required', 'string'],
+            'excerpt' => ['required', 'string'],
+            'status' => ['required', 'in:live,draft,scheduled'],
+            'allow_comments' => ['required', 'in:allow,forbidden'],
+            'featured_image' => ['required', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
+            'featured_image_caption' => ['required', 'string', 'max:255'],
+            'content' => ['required', 'string'],
+            'meta_title' => ['required', 'string', 'max:255'],
+            'meta_description' => ['required', 'string', 'max:255'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'published_at' => ['nullable', 'date'],
         ];
     }
 }

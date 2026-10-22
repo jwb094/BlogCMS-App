@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostFormRequest;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -52,17 +55,26 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::orderBy('name')->get();
 
-        return view('backend.posts.create');
+        return view('backend.posts.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostFormRequest $request)
     {
-        //
+        $postData = $request->validated();
+        $postData['slug'] = Str::slug($postData['slug']);
+        $postData['user_id'] = $request->user()->id;
+        $postData['published_at'] = $postData['published_at'] ?: null;
+        $postData['featured_image'] = $request->file('featured_image')->store('post-featured-images', 'public');
+
+        Post::create($postData);
+
+        return redirect()->route('admin.post.index')
+            ->with('success', 'Post created successfully.');
     }
 
     /**
