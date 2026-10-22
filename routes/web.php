@@ -112,6 +112,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('admin.dashboard');
 
+    Route::get('posts/bin', [PostController::class, 'bin'])
+        ->name('admin.post.bin');
+    Route::patch('posts/{postId}/restore', [PostController::class, 'restore'])
+        ->name('admin.post.restore');
     Route::resource('posts', PostController::class)
         ->names('admin.post');
     Route::delete('posts/{post}/permanent', [PostController::class, 'forceDestroy'])
