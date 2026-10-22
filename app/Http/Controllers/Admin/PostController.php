@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -12,7 +13,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('backend.posts.index');
+        $posts = Post::with('category')
+            ->latest()
+            ->paginate(10);
+
+        return view('backend.posts.index', compact('posts'));
     }
 
     /**
@@ -60,8 +65,26 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Post $post)
     {
-        //
+        abort_unless(auth()->user()?->isAdmin(), 403);
+
+        $post->delete();
+
+        return redirect()->route('admin.post.index')
+            ->with('success', 'Post moved to the recycle bin.');
+    }
+
+    /**
+     * Permanently delete a post.
+     */
+    public function forceDestroy(Post $post)
+    {
+        abort_unless(auth()->user()?->isAdmin(), 403);
+
+        $post->forceDelete();
+
+        return redirect()->route('admin.post.index')
+            ->with('success', 'Post permanently deleted.');
     }
 }
