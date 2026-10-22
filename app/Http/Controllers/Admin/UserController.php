@@ -120,6 +120,6 @@ class UserController extends Controller
         $request->session()->regenerateToken();
         Auth::logout();
 
-        return redirect(route('profile.login'));
+        return redirect(route('login'));
     }
 }
