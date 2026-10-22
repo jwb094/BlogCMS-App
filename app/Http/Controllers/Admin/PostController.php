@@ -14,7 +14,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('category')
+        $postsQuery = Post::with('category');
+
+        if (auth()->user()->isAuthor()) {
+            $postsQuery->where('user_id', auth()->id());
+        }
+
+        $posts = $postsQuery
             ->latest()
             ->paginate(10);
 
@@ -26,8 +32,13 @@ class PostController extends Controller
      */
     public function bin()
     {
-        $posts = Post::onlyTrashed()
-            ->with('category')
+        $postsQuery = Post::onlyTrashed()->with('category');
+
+        if (auth()->user()->isAuthor()) {
+            $postsQuery->where('user_id', auth()->id());
+        }
+
+        $posts = $postsQuery
             ->latest('deleted_at')
             ->paginate(10);
 
@@ -39,9 +50,15 @@ class PostController extends Controller
      */
     public function restore(string $postId)
     {
-        abort_unless(auth()->user()?->isAdmin() || auth()->user()?->isAuthor(), 403);
+        $postQuery = Post::onlyTrashed();
 
-        $post = Post::onlyTrashed()->findOrFail($postId);
+        if (auth()->user()->isAuthor()) {
+            $postQuery->where('user_id', auth()->id());
+        } else {
+            abort_unless(auth()->user()->isAdmin(), 403);
+        }
+
+        $post = $postQuery->findOrFail($postId);
         $post->restore();
 
         return redirect()->route('admin.post.bin')
@@ -87,6 +104,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorizePostManagement($post);
+
         $categories = Category::orderBy('name')->get();
 
         return view('backend.posts.edit', compact('post', 'categories'));
@@ -97,6 +116,8 @@ class PostController extends Controller
      */
     public function update(PostFormRequest $request, Post $post)
     {
+        $this->authorizePostManagement($post);
+
         $postData = $request->validated();
         $postData['published_at'] = $postData['published_at'] ?: null;
 
@@ -117,7 +138,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        abort_unless(auth()->user()?->isAdmin() || auth()->user()?->isAuthor(), 403);
+        $this->authorizePostManagement($post);
 
         $post->delete();
 
@@ -130,11 +151,21 @@ class PostController extends Controller
      */
     public function forceDestroy(Post $post)
     {
-        abort_unless(auth()->user()?->isAdmin() || auth()->user()?->isAuthor(), 403);
+        $this->authorizePostManagement($post);
 
         $post->forceDelete();
 
         return redirect()->route('admin.post.index')
             ->with('success', 'Post permanently deleted.');
+    }
+
+    private function authorizePostManagement(Post $post): void
+    {
+        $user = auth()->user();
+
+        abort_unless(
+            $user?->isAdmin() || ($user?->isAuthor() && (int) $post->user_id === (int) $user->id),
+            403
+        );
     }
 }
