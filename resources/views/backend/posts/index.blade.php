@@ -22,7 +22,7 @@
                     <th scope="col">Category</th>
                     <th scope="col">Date</th>
                     <th scope="col">Comments</th>
-                    @if (auth()->user()->isAdmin())
+                    @if (auth()->user()->isAdmin() || auth()->user()->isAuthor())
                         <th scope="col">Actions</th>
                     @endif
                 </tr>
@@ -34,9 +34,13 @@
                         <td>{{ $post->category?->name ?? 'Uncategorized' }}</td>
                         <td>{{ $post->created_at?->format('d M Y') ?? '—' }}</td>
                         <td>{{ $post->allow_comments === 'allow' ? 'Enabled' : 'Disabled' }}</td>
-                        @if (auth()->user()->isAdmin())
+                        @if (auth()->user()->isAdmin() || auth()->user()->isAuthor())
                             <td>
                                 <div class="d-flex flex-wrap gap-2">
+                                    @if (auth()->user()->isAuthor())
+                                        <a href="{{ route('admin.post.edit', $post) }}" class="btn btn-primary btn-sm">Edit</a>
+                                        <a href="{{ route('blog.post', $post->id) }}" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Preview</a>
+                                    @endif
                                     <form action="{{ route('admin.post.destroy', $post) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
@@ -57,7 +61,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="{{ auth()->user()->isAdmin() ? 5 : 4 }}" class="text-center py-4">No posts found.</td>
+                        <td colspan="{{ auth()->user()->isAdmin() || auth()->user()->isAuthor() ? 5 : 4 }}" class="text-center py-4">No posts found.</td>
                     </tr>
                 @endforelse
             </tbody>
