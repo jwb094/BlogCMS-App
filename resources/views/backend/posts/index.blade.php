@@ -7,7 +7,9 @@
 <div class="container-fluid mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0">Posts</h1>
-        <a href="{{ route('admin.post.create') }}" class="btn btn-primary">New Post</a>
+        @if (auth()->user()->isAuthor())
+            <a href="{{ route('admin.post.create') }}" class="btn btn-primary">New Post</a>
+        @endif
     </div>
 
     @if (session('success'))
