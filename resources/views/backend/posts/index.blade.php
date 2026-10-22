@@ -38,19 +38,19 @@
                         <td>{{ $post->allow_comments === 'allow' ? 'Enabled' : 'Disabled' }}</td>
                         @if (auth()->user()->isAdmin() || auth()->user()->isAuthor())
                             <td>
-                                <div class="d-flex flex-wrap gap-2">
+                                <div class="d-flex flex-nowrap align-items-center gap-2">
                                     @if (auth()->user()->isAuthor())
-                                        <a href="{{ route('admin.post.edit', $post) }}" class="btn btn-primary btn-sm">Edit</a>
-                                        <a href="{{ route('blog.post', $post->id) }}" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Preview</a>
+                                        <a href="{{ route('admin.post.edit', $post) }}" class="btn btn-primary btn-sm text-nowrap">Edit</a>
+                                        <a href="{{ route('blog.post', $post->id) }}" class="btn btn-secondary btn-sm text-nowrap" target="_blank" rel="noopener">Preview</a>
                                     @endif
-                                    <form action="{{ route('admin.post.destroy', $post) }}" method="POST">
+                                    <form action="{{ route('admin.post.destroy', $post) }}" method="POST" class="mb-0 flex-shrink-0">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Move this post to the recycle bin?')">
-                                            Move to recycle bin
+                                            Recycle bin
                                         </button>
                                     </form>
-                                    <form action="{{ route('admin.post.force-destroy', $post) }}" method="POST">
+                                    <form action="{{ route('admin.post.force-destroy', $post) }}" method="POST" class="mb-0 flex-shrink-0">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Permanently delete this post? This cannot be undone.')">
