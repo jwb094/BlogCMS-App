@@ -16,20 +16,20 @@ class BlogController extends Controller
         return view('frontend.index');
     }
 
-     /**
+    /**
      * Display the BLog Post Article.
      */
     public function blogPost($id)
     {
-        return view('frontend.blog.blogPost');
+        return view('frontend.blogPost');
     }
 
-     /**
+    /**
      * Display a listing of all blogs.
      */
     public function blog($id)
     {
-        return view('frontend.blog.blog');
+        return view('frontend.blog');
     }
 
     /**
@@ -37,20 +37,20 @@ class BlogController extends Controller
      */
     public function category($categoryId)
     {
-        return view('frontend.blog.category');
+        return view('frontend.category');
     }
 
-     /**
+    /**
      * Display a listing of all blog post with a specific tag.
      */
-    public function tags()
+    public function tag($tagId)
     {
-        return view('frontend.blog.tag');
+        return view('frontend.tag');
     }
 
-     public function author($authorId)
+    public function author($authorId)
     {
-        return view('frontend.blog.author');
+        return view('frontend.author');
     }
 
     /**
