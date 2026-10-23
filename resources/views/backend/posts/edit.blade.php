@@ -58,10 +58,7 @@
                         @error('category_id') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
                     <div class="col-md-8 mb-3">
-                        <x-form.label for="featured_image" class="form-label">Featured Image</x-form.label>
-                        <x-form.input id="featured_image" name="featured_image" type="file" accept="image/*" class="form-control" />
-                        <div class="form-text">Choose a new image to replace the current one. Leave blank to keep it.</div>
-                        @error('featured_image') <div class="text-danger small">{{ $message }}</div> @enderror
+                        @include('backend.posts.partials.featured-image-gallery', ['selectedImage' => old('featured_image', $post->featured_image)])
                     </div>
                     <div class="col-md-4 mb-3">
                         <x-form.label for="featured_image_caption" class="form-label">Image Caption</x-form.label>
