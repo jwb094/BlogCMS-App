@@ -18,6 +18,7 @@
  
             <ul class="list-group text-start ">
                 <li class="list-group-item">Filename: {{ $media->filename }}</li>
+                <li class="list-group-item">Uploaded by: {{ $media->user?->name ?? 'Unknown' }}</li>
                 <li class="list-group-item">Size : {{ round($media->file_size  / 1048576, 2)}}  MB
                 </li>
                 <li class="list-group-item">Width : {{ $media->width }}px</li>

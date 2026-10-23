@@ -15,7 +15,7 @@ class MediaController extends Controller
     {
         $mediaQuery = Media::query();
 
-        if (!auth()->user()->isAdmin()) {
+        if (! auth()->user()->isAdmin()) {
             $mediaQuery->where('user_id', auth()->id());
         }
 
@@ -59,6 +59,8 @@ class MediaController extends Controller
             auth()->user()?->isAdmin() || (int) $medium->user_id === (int) auth()->id(),
             403
         );
+
+        $medium->loadMissing('user');
 
         // dd($medium);
         return view('backend.media.show', ['media' => $medium]);
