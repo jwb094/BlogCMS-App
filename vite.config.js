@@ -6,7 +6,7 @@ import { bunny } from 'laravel-vite-plugin/fonts';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: ['resources/css/app.css', 'resources/css/frontend/index.css', 'resources/js/app.js'],
             refresh: true,
             // fonts: [
             //     bunny('Instrument Sans', {
