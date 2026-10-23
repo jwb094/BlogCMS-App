@@ -21,9 +21,9 @@
      @endif 
 </head>
 
-<body class="d-flex flex-column align-items-center justify-content-center vh-100 bg-body-tertiary' : 'd-flex flex-column w-100 vh-100 bg-body-tertiary">
+<body class="d-flex flex-column min-vh-100 bg-body-tertiary">
     @include('include.header')
-    <main class="container-fluid ">
+    <main class="container-fluid flex-grow-1 pt-5">
         @yield('content')
     </main>
     @include('include.footer')
