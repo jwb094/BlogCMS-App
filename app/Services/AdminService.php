@@ -8,6 +8,7 @@ use App\Models\Media;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -78,6 +79,67 @@ class AdminService
         }
 
         return compact('globalStats', 'monthlyPosts', 'authorMonthlyPosts', 'personalStats', 'popularCategories');
+    }
+
+    // Comments
+
+    public function commentsIndex(User $user): LengthAwarePaginator
+    {
+        $commentsQuery = Comment::with(['post.user']);
+
+        if (! $user->isAdmin()) {
+            $commentsQuery->whereHas('post', function ($query) use ($user): void {
+                $query->where('user_id', $user->id);
+            });
+        }
+
+        return $commentsQuery
+            ->latest('created_at')
+            ->paginate(9);
+    }
+
+    /**
+     * Update a comment's moderation status.
+     *
+     * @param  array<string, mixed>  $updatedCommentData
+     */
+    public function updateCommentStatus(Comment $comment, array $updatedCommentData): Comment
+    {
+        $comment->update($updatedCommentData);
+
+        return $comment->refresh();
+    }
+
+    public function deleteComment(Comment $comment): void
+    {
+        $comment->delete();
+    }
+
+    // Media
+
+    public function mediaIndex(User $user, ?string $filename = null): LengthAwarePaginator
+    {
+        $mediaQuery = Media::query();
+
+        if (! $user->isAdmin()) {
+            $mediaQuery->where('user_id', $user->id);
+        }
+
+        if ($filename !== null && $filename !== '') {
+            $mediaQuery->where('filename', 'LIKE', '%'.$filename.'%');
+        }
+
+        return $mediaQuery
+            ->latest('created_at')
+            ->paginate(9)
+            ->withQueryString();
+    }
+
+    public function mediaDetails(Media $medium, User $user): Media
+    {
+        abort_unless($user->isAdmin() || (int) $medium->user_id === (int) $user->id, 403);
+
+        return $medium->loadMissing('user');
     }
 
     /**

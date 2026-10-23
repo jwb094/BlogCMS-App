@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Media;
+use App\Services\AdminService;
 use Illuminate\Http\Request;
 
 class MediaController extends Controller
@@ -11,24 +12,10 @@ class MediaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(AdminService $adminService, Request $request)
     {
-        $mediaQuery = Media::query();
-
-        if (! auth()->user()->isAdmin()) {
-            $mediaQuery->where('user_id', auth()->id());
-        }
-
-        if ($request->filled('name')) {
-            $mediaQuery->where('filename', 'LIKE', '%'.$request->input('name').'%');
-        }
-
         $data = [
-            'media' => $mediaQuery
-                ->orderBy('filename', 'ASC')
-                ->latest()
-                ->paginate(9)
-                ->withQueryString(),
+            'media' => $adminService->mediaIndex(auth()->user(), $request->input('name')),
         ];
 
         return view('backend.media.index', compact('data'));
@@ -53,16 +40,10 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Media $medium)
+    public function show(AdminService $adminService, Media $medium)
     {
-        abort_unless(
-            auth()->user()?->isAdmin() || (int) $medium->user_id === (int) auth()->id(),
-            403
-        );
+        $medium = $adminService->mediaDetails($medium, auth()->user());
 
-        $medium->loadMissing('user');
-
-        // dd($medium);
         return view('backend.media.show', ['media' => $medium]);
     }
 

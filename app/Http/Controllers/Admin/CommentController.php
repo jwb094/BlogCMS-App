@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentFormRequest;
 use App\Models\Comment;
-use App\Services\BlogService;
+use App\Services\AdminService;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -13,19 +13,9 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(AdminService $adminService)
     {
-        $commentsQuery = Comment::with(['post.user']);
-
-        if (! auth()->user()->isAdmin()) {
-            $commentsQuery->whereHas('post', function ($query): void {
-                $query->where('user_id', auth()->id());
-            });
-        }
-
-        $comments = $commentsQuery
-            ->latest()
-            ->paginate(9);
+        $comments = $adminService->commentsIndex(auth()->user());
 
         return view('backend.comments.index', compact('comments'));
     }
@@ -64,12 +54,11 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(BlogService $blogService, CommentFormRequest $request, Comment $comment)
+    public function update(AdminService $adminService, CommentFormRequest $request, Comment $comment)
     {
         $this->authorizeCommentManagement($comment);
 
-        //
-        $blogService->updateCommentStatus($request->validated(), $comment->id);
+        $adminService->updateCommentStatus($comment, $request->validated());
 
         return redirect()->route('admin.comments.index')
             ->with('success', 'Comment Status was updated');
@@ -78,11 +67,11 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(AdminService $adminService, Comment $comment)
     {
         $this->authorizeCommentManagement($comment);
 
-        $comment->delete();
+        $adminService->deleteComment($comment);
 
         return redirect(route('admin.comments.index'))
             ->with('Status', 'Tag Record was delete');
