@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Public\BlogController;
 use App\Http\Controllers\Public\CompanyController;
+use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\SearchController;
 // use App\Http\Controllers\Public\SearchController;
 use App\Http\Controllers\Public\UserController as PublicUserController;
@@ -17,22 +18,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Public - Frontend
-Route::get('/', [BlogController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/blogs', [BlogController::class, 'blog'])->name('blog.archive');
 Route::get('/blog/{id}', [BlogController::class, 'blogPost'])->name('blog.post');
-Route::get('/category/{slug}', [BlogController::class, 'blogPost'])->name('blog.category');
-Route::get('/tags/{slug}', [BlogController::class, 'blogPost'])->name('blog.tag');
+Route::get('/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
+Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
 Route::get('/search', [SearchController::class, 'search'])->name('blog.search');
-Route::get('/about', function () {
-    return view('frontend.company_and_support.about');
-});
-Route::get('/contact', [CompanyController::class, 'contact']);
-Route::get('/terms', function () {
-    return view('frontend.company_and_support.terms');
-});
-Route::get('/privacy', function () {
-    return view('frontend.company_and_support.privacy');
-});
+Route::view('/about', 'frontend.company_and_support.about')->name('pages.about');
+Route::get('/contact', [CompanyController::class, 'contact'])->name('pages.contact');
+Route::view('/terms', 'frontend.company_and_support.terms_and_conditions')->name('pages.terms');
+Route::view('/privacy', 'frontend.company_and_support.privacy-policy')->name('pages.privacy');
 
 Route::get('/login', [PublicUserController::class, 'login'])
     ->name('login');
