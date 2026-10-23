@@ -1,0 +1,31 @@
+.top-stories-side {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.home-top-story {
+    aspect-ratio: 4 / 3;
+    max-height: 34rem;
+}
+
+.home-top-story-gradient {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, .9) 100%);
+}
+
+.home-side-story-gradient {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .05), rgba(0, 0, 0, .88));
+}
+
+.home-article-image,
+.home-article-image-placeholder {
+    height: 14rem;
+}
+
+@media (min-width: 992px) {
+    .top-stories-side {
+        height: 100%;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+    }
+}
