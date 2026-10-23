@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostFormRequest;
 use App\Models\Category;
+use App\Models\Media;
 use App\Models\Post;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -71,8 +74,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::orderBy('name')->get();
+        $featuredImages = $this->featuredImagesForCurrentUser();
 
-        return view('backend.posts.create', compact('categories'));
+        return view('backend.posts.create', compact('categories', 'featuredImages'));
     }
 
     /**
@@ -83,7 +87,10 @@ class PostController extends Controller
         $postData = $request->validated();
         $postData['user_id'] = $request->user()->id;
         $postData['published_at'] = $postData['published_at'] ?: null;
-        $postData['featured_image'] = $request->file('featured_image')->store('post-featured-images', 'public');
+        $postData['featured_image'] = $request->hasFile('featured_image_upload')
+            ? $this->storeFeaturedImage($request->file('featured_image_upload'), $request->user()->id)
+            : $postData['featured_image'];
+        unset($postData['featured_image_upload']);
 
         Post::create($postData);
 
@@ -107,8 +114,9 @@ class PostController extends Controller
         $this->authorizePostManagement($post);
 
         $categories = Category::orderBy('name')->get();
+        $featuredImages = $this->featuredImagesForCurrentUser();
 
-        return view('backend.posts.edit', compact('post', 'categories'));
+        return view('backend.posts.edit', compact('post', 'categories', 'featuredImages'));
     }
 
     /**
@@ -121,11 +129,10 @@ class PostController extends Controller
         $postData = $request->validated();
         $postData['published_at'] = $postData['published_at'] ?: null;
 
-        if ($request->hasFile('featured_image')) {
-            $postData['featured_image'] = $request->file('featured_image')->store('post-featured-images', 'public');
-        } else {
-            unset($postData['featured_image']);
+        if ($request->hasFile('featured_image_upload')) {
+            $postData['featured_image'] = $this->storeFeaturedImage($request->file('featured_image_upload'), $request->user()->id);
         }
+        unset($postData['featured_image_upload']);
 
         $post->update($postData);
 
@@ -167,5 +174,54 @@ class PostController extends Controller
             $user?->isAdmin() || ($user?->isAuthor() && (int) $post->user_id === (int) $user->id),
             403
         );
+    }
+
+    /**
+     * Get image paths owned by the signed-in user that still exist on disk.
+     *
+     * @return array<int, string>
+     */
+    private function featuredImagesForCurrentUser(): array
+    {
+        $userId = auth()->id();
+        $imagePaths = Media::query()
+            ->where('user_id', $userId)
+            ->where('path', 'like', 'post-featured-images/%')
+            ->pluck('path')
+            ->merge(
+                Post::withTrashed()
+                    ->where('user_id', $userId)
+                    ->where('featured_image', 'like', 'post-featured-images/%')
+                    ->pluck('featured_image')
+            );
+
+        return $imagePaths
+            ->unique()
+            ->filter(fn (string $path): bool => Storage::disk('public')->exists($path))
+            ->values()
+            ->all();
+    }
+
+    private function storeFeaturedImage(UploadedFile $image, int $userId): string
+    {
+        $path = $image->store('post-featured-images', 'public');
+
+        if ($path === false) {
+            abort(500, 'The featured image could not be saved.');
+        }
+
+        $dimensions = $image->dimensions() ?: [0, 0];
+
+        Media::create([
+            'filename' => mb_substr($image->getClientOriginalName(), 0, 255),
+            'path' => $path,
+            'mime_type' => $image->getMimeType() ?? 'application/octet-stream',
+            'file_size' => (string) $image->getSize(),
+            'width' => (string) $dimensions[0],
+            'height' => (string) $dimensions[1],
+            'user_id' => $userId,
+        ]);
+
+        return $path;
     }
 }
