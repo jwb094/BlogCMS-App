@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Services\PublicBlogService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     //
-        /**
+    /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PublicBlogService $blogService)
     {
-        //
+        return view('frontend.index', $blogService->homePageData());
     }
 
     /**
