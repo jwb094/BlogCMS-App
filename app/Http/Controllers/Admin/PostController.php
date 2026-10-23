@@ -17,7 +17,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $postsQuery = Post::with('category');
+        $postsQuery = Post::with(['category', 'user']);
 
         if (auth()->user()->isAuthor()) {
             $postsQuery->where('user_id', auth()->id());
