@@ -26,11 +26,12 @@
     @foreach($data['media'] as $key => $value)
     <div class="col-12 col-md-4">
         <a href={{ route('admin.media.show', ['medium' => $value->id]) }}>
-            <figure class="figure">
-                <img src="{{ asset('storage/' . $value->path) }}" 
-                alt="{{ $value->filename }}" 
-                class="img-thumbnail figure-img img-fluid rounded" 
-                alt="A generic square placeholder image with rounded corners in a figure.">
+            <figure class="figure w-100">
+                <div class="ratio ratio-4x3">
+                    <img src="{{ asset('storage/' . $value->path) }}"
+                    alt="{{ $value->filename }}"
+                    class="img-thumbnail figure-img rounded object-fit-cover">
+                </div>
                 <figcaption class="figure-caption">{{ $value->filename }}</figcaption>
             </figure>
         </a>
