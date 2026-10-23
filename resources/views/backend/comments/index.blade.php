@@ -27,6 +27,10 @@
                 <thead>
                     <tr class="table-dark">
                         <th scope="col">Name</th>
+                        <th scope="col">Post Title</th>
+                        @if (auth()->user()->isAdmin())
+                            <th scope="col">Author</th>
+                        @endif
                         <th scope="col">Status</th>
                         <th scope="col">Date</th>
                         <th scope="col">Handle</th>
@@ -36,6 +40,10 @@
                     @foreach($comments as $key => $value)
                     <tr>
                         <td>{{ $value->name }}</td>
+                        <td>{{ $value->post?->title ?? 'Post unavailable' }}</td>
+                        @if (auth()->user()->isAdmin())
+                            <td>{{ $value->post?->user?->name ?? 'Unknown' }}</td>
+                        @endif
                         <td>{{ $value->status }}</td>
                           <td>{{ $value->created_at->format('d.m.Y') }}</td>
                         <td>

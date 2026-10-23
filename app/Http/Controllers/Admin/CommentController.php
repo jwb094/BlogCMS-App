@@ -15,9 +15,9 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $commentsQuery = Comment::query();
+        $commentsQuery = Comment::with(['post.user']);
 
-        if (!auth()->user()->isAdmin()) {
+        if (! auth()->user()->isAdmin()) {
             $commentsQuery->whereHas('post', function ($query): void {
                 $query->where('user_id', auth()->id());
             });
