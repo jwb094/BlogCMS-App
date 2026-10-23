@@ -59,24 +59,24 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">
+                    <a class="nav-link" href="{{ route('blog.archive') }}">
                         Categories
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('blog.search') }}">
                         Search
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('pages.about') }}">
                         About Us
                     </a>
                 </li>
                      <li class="nav-item">
-                    <a class="nav-link active" href="#">
+                    <a class="nav-link" href="{{ route('pages.contact') }}">
                         Contact Us
                     </a>
                 </li>
