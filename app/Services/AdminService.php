@@ -10,8 +10,10 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class AdminService
 {
@@ -140,6 +142,157 @@ class AdminService
         abort_unless($user->isAdmin() || (int) $medium->user_id === (int) $user->id, 403);
 
         return $medium->loadMissing('user');
+    }
+
+    // Posts
+
+    public function postsIndex(User $user): LengthAwarePaginator
+    {
+        $postsQuery = Post::with(['category', 'user']);
+
+        if ($user->isAuthor()) {
+            $postsQuery->where('user_id', $user->id);
+        }
+
+        return $postsQuery->latest()->paginate(10);
+    }
+
+    public function postsBin(User $user): LengthAwarePaginator
+    {
+        $postsQuery = Post::onlyTrashed()->with('category');
+
+        if ($user->isAuthor()) {
+            $postsQuery->where('user_id', $user->id);
+        }
+
+        return $postsQuery->latest('deleted_at')->paginate(10);
+    }
+
+    /** @return array{categories: EloquentCollection<int, Category>, featuredImages: array<int, string>} */
+    public function postFormData(User $user): array
+    {
+        return [
+            'categories' => Category::orderBy('name')->get(),
+            'featuredImages' => $this->featuredImagesForUser($user),
+        ];
+    }
+
+    /** @param array<string, mixed> $postData */
+    public function createPost(User $user, array $postData, ?UploadedFile $featuredImageUpload = null): Post
+    {
+        $postData['user_id'] = $user->id;
+        $postData['published_at'] = $postData['published_at'] ?: null;
+        $postData['featured_image'] = $featuredImageUpload !== null
+            ? $this->storeFeaturedImage($featuredImageUpload, $user->id)
+            : $postData['featured_image'];
+        unset($postData['featured_image_upload']);
+
+        return Post::create($postData);
+    }
+
+    public function postForEditing(Post $post, User $user): Post
+    {
+        $this->authorizePostManagement($post, $user);
+
+        return $post;
+    }
+
+    /** @param array<string, mixed> $postData */
+    public function updatePost(Post $post, User $user, array $postData, ?UploadedFile $featuredImageUpload = null): Post
+    {
+        $this->authorizePostManagement($post, $user);
+
+        $postData['published_at'] = $postData['published_at'] ?: null;
+
+        if ($featuredImageUpload !== null) {
+            $postData['featured_image'] = $this->storeFeaturedImage($featuredImageUpload, $user->id);
+        }
+        unset($postData['featured_image_upload']);
+
+        $post->update($postData);
+
+        return $post->refresh();
+    }
+
+    public function restorePost(string $postId, User $user): void
+    {
+        $postQuery = Post::onlyTrashed();
+
+        if ($user->isAuthor()) {
+            $postQuery->where('user_id', $user->id);
+        } else {
+            abort_unless($user->isAdmin(), 403);
+        }
+
+        $postQuery->findOrFail($postId)->restore();
+    }
+
+    public function deletePost(Post $post, User $user): void
+    {
+        $this->authorizePostManagement($post, $user);
+        $post->delete();
+    }
+
+    public function forceDeletePost(Post $post, User $user): void
+    {
+        $this->authorizePostManagement($post, $user);
+        $post->forceDelete();
+    }
+
+    private function authorizePostManagement(Post $post, User $user): void
+    {
+        abort_unless(
+            $user->isAdmin() || ($user->isAuthor() && (int) $post->user_id === (int) $user->id),
+            403
+        );
+    }
+
+    /**
+     * Get image paths owned by the signed-in user that still exist on disk.
+     *
+     * @return array<int, string>
+     */
+    private function featuredImagesForUser(User $user): array
+    {
+        $imagePaths = Media::query()
+            ->where('user_id', $user->id)
+            ->where('path', 'like', 'post-featured-images/%')
+            ->pluck('path')
+            ->merge(
+                Post::withTrashed()
+                    ->where('user_id', $user->id)
+                    ->where('featured_image', 'like', 'post-featured-images/%')
+                    ->pluck('featured_image')
+            );
+
+        return $imagePaths
+            ->unique()
+            ->filter(fn (string $path): bool => Storage::disk('public')->exists($path))
+            ->values()
+            ->all();
+    }
+
+    private function storeFeaturedImage(UploadedFile $image, int $userId): string
+    {
+        $path = $image->store('post-featured-images', 'public');
+
+        if ($path === false) {
+            abort(500, 'The featured image could not be saved.');
+        }
+
+        $dimensions = $image->dimensions() ?: [0, 0];
+
+        Media::create([
+            'filename' => mb_substr($image->getClientOriginalName(), 0, 255),
+            'path' => $path,
+            'mime_type' => $image->getMimeType() ?? 'application/octet-stream',
+            'file_size' => (string) $image->getSize(),
+            'width' => (string) $dimensions[0],
+            'height' => (string) $dimensions[1],
+            'user_id' => $userId,
+        ]);
+
+        return $path;
     }
 
     /**
