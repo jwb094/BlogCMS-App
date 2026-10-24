@@ -59,7 +59,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('blog.archive') }}">
+                    <a class="nav-link" href="{{ route('blog.categories') }}">
                         Categories
                     </a>
                 </li>
