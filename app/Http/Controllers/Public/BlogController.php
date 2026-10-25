@@ -20,9 +20,9 @@ class BlogController extends Controller
     /**
      * Display the BLog Post Article.
      */
-    public function blogPost($id)
+    public function blogPost(PublicBlogService $blogService, string $id)
     {
-        return view('frontend.blogPost');
+        return view('frontend.blogPost', $blogService->article($id));
     }
 
     /**
