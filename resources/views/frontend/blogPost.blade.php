@@ -113,9 +113,9 @@
             </div>
         </section>
 
-        @if ($relatedPosts->isNotEmpty())
-            <section class="mt-5" aria-labelledby="related-heading">
-                <h2 id="related-heading" class="h3 fw-bold border-bottom pb-2 mb-4">More in {{ $post->category?->name ?? 'the blog' }}</h2>
+        <section class="mt-5" aria-labelledby="related-heading">
+            <h2 id="related-heading" class="h3 fw-bold border-bottom pb-2 mb-4">Related Posts</h2>
+            @if ($relatedPosts->isNotEmpty())
                 <div class="row row-cols-1 row-cols-md-3 g-4">
                     @foreach ($relatedPosts as $relatedPost)
                         <div class="col">
@@ -136,7 +136,9 @@
                         </div>
                     @endforeach
                 </div>
-            </section>
-        @endif
+            @else
+                <p class="text-body-secondary">There are no other published posts to recommend yet.</p>
+            @endif
+        </section>
     </div>
 @endsection
