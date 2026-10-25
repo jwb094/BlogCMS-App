@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Services\PublicBlogService;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -35,17 +36,24 @@ class BlogController extends Controller
     /**
      * Display a listing of all blogs post with a specific category.
      */
-    public function category($categoryId)
+    public function categories(PublicBlogService $blogService)
     {
-        return view('frontend.category');
+        return view('frontend.category', [
+            'categories' => $blogService->categoriesIndex(),
+        ]);
+    }
+
+    public function category(PublicBlogService $blogService, string $slug)
+    {
+        return view('frontend.category-detail', $blogService->categoryArticles($slug));
     }
 
     /**
      * Display a listing of all blog post with a specific tag.
      */
-    public function tag($tagId)
+    public function tag(PublicBlogService $blogService, string $slug)
     {
-        return view('frontend.tag');
+        return view('frontend.tag', $blogService->tagArticles($slug));
     }
 
     public function author($authorId)
