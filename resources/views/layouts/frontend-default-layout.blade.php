@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>BlogCMS -   @yield('title')</title>
+    @stack('meta')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
