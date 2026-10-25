@@ -38,7 +38,7 @@
 
     <div class="container">
 
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             BlogSpot
         </a>
 
