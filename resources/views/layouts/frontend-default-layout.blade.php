@@ -23,7 +23,7 @@
 
 <body class="d-flex flex-column min-vh-100 bg-body-tertiary">
     @include('include.header')
-    <main class="container-fluid flex-grow-1 pt-5">
+    <main class="container-fluid d-flex flex-column flex-grow-1 pt-5">
         @yield('content')
     </main>
     @include('include.footer')
