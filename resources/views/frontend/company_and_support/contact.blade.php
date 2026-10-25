@@ -2,9 +2,9 @@
 @section('title', 'Contact Us')
 
 @section('content')
-    <div class="container py-5">
-        <div class="row g-5">
-            <div class="col-lg-7">
+    <div class="container py-5 my-auto">
+        <div class="row g-5 justify-content-center align-items-center">
+            <div class="col-lg-7 text-center">
                 <p class="text-primary fw-semibold text-uppercase small mb-2">Contact</p>
                 <h1 class="display-5 fw-bold">We’d like to hear from you</h1>
                 <p class="lead text-body-secondary">
