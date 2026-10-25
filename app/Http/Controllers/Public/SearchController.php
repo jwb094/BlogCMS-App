@@ -3,14 +3,21 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Services\PublicBlogService;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-
-    public function search()
+    public function search(Request $request, PublicBlogService $blogService)
     {
-        //
+        $validated = $request->validate([
+            'q' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $searchTerm = trim($validated['q'] ?? '');
+        $posts = $blogService->searchArticles($searchTerm !== '' ? $searchTerm : null);
+
+        return view('frontend.search', compact('posts', 'searchTerm'));
     }
 
     //
