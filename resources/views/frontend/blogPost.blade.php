@@ -113,6 +113,47 @@
             </div>
         </section>
 
+        <section class="row justify-content-center mt-4" aria-labelledby="add-comment-heading">
+            <div class="col-lg-9 col-xl-8">
+                @if ($post->allow_comments === 'allow')
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h2 id="add-comment-heading" class="h3 fw-bold">Add a comment</h2>
+                            <p class="text-body-secondary">Comments are reviewed before they appear. Links and advertising are not allowed.</p>
+
+                            <div class="alert d-none" data-comment-feedback role="status" aria-live="polite"></div>
+
+                            <form action="{{ route('blog.comments.store', $post->id) }}" method="POST" data-comment-form>
+                                @csrf
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="comment-name" class="form-label">Name</label>
+                                        <input id="comment-name" class="form-control" type="text" name="name" maxlength="100" value="{{ old('name', auth()->user()?->name) }}" autocomplete="name" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="comment-email" class="form-label">Email</label>
+                                        <input id="comment-email" class="form-control" type="email" name="email" maxlength="255" value="{{ old('email', auth()->user()?->email) }}" autocomplete="email" required>
+                                        <div class="form-text">Your email address will not be shown publicly.</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="comment-content" class="form-label">Comment</label>
+                                        <textarea id="comment-content" class="form-control" name="content" rows="5" minlength="3" maxlength="5000" required>{{ old('content') }}</textarea>
+                                    </div>
+                                    <div class="visually-hidden" aria-hidden="true">
+                                        <label for="comment-website">Leave this field empty</label>
+                                        <input id="comment-website" type="text" name="website" tabindex="-1" autocomplete="off">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary" data-comment-submit>Submit comment</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </section>
+
         <section class="mt-5" aria-labelledby="related-heading">
             <h2 id="related-heading" class="h3 fw-bold border-bottom pb-2 mb-4">Related Posts</h2>
             @if ($relatedPosts->isNotEmpty())
@@ -142,3 +183,7 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    @vite('resources/js/frontend/comments.js')
+@endpush
