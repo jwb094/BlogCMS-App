@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/blogs', [BlogController::class, 'blog'])->name('blog.archive');
 Route::get('/blog/{id}', [BlogController::class, 'blogPost'])->name('blog.post');
+Route::post('/blog/{id}/comments', [BlogController::class, 'storeComment'])
+    ->middleware('throttle:5,1')
+    ->name('blog.comments.store');
 Route::get('/categories', [BlogController::class, 'categories'])->name('blog.categories');
 Route::get('/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
