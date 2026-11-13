@@ -25,6 +25,27 @@ class BlogController extends Controller
         return view('frontend.blogPost', $blogService->article($id));
     }
 
+    public function storeComment(Request $request, PublicBlogService $blogService, string $id)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'email:rfc', 'max:255'],
+            'content' => ['required', 'string', 'min:3', 'max:5000'],
+        ]);
+
+        if ($request->filled('website')) {
+            return response()->json([
+                'message' => 'Your comment has been submitted and is awaiting moderation.',
+            ], 202);
+        }
+
+        $blogService->addComment($id, $validated, $request->user(), (string) $request->ip());
+
+        return response()->json([
+            'message' => 'Your comment has been submitted and is awaiting moderation.',
+        ], 201);
+    }
+
     /**
      * Display a listing of all blogs.
      */
