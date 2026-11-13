@@ -3,13 +3,72 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Validation\ValidationException;
 
 class PublicBlogService
 {
+    /** @param array{name: string, email: string, content: string} $commentData */
+    public function addComment(string $postId, array $commentData, ?User $user, string $ipAddress): Comment
+    {
+        $post = Post::query()
+            ->where('status', 'live')
+            ->where(function ($query): void {
+                $query->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            })
+            ->findOrFail($postId);
+
+        abort_unless($post->allow_comments === 'allow', 403);
+
+        $content = trim(strip_tags($commentData['content']));
+
+        if (mb_strlen($content) < 3) {
+            throw ValidationException::withMessages([
+                'content' => 'Please enter a comment with at least three characters.',
+            ]);
+        }
+
+        if (preg_match('~(?:https?://|www\\.|<\\s*a\\b|href\\s*=|(?:[a-z0-9-]+\\.)+[a-z]{2,}(?:/|\\b))~i', $content)) {
+            throw ValidationException::withMessages([
+                'content' => 'Comments cannot contain links or advertising.',
+            ]);
+        }
+
+        if (preg_match('/(.)\\1{9,}/us', $content)) {
+            throw ValidationException::withMessages([
+                'content' => 'Please remove repeated characters from your comment.',
+            ]);
+        }
+
+        $duplicateCommentExists = Comment::query()
+            ->where('ip_address', $ipAddress)
+            ->where('content', $content)
+            ->where('created_at', '>=', now()->subDay())
+            ->exists();
+
+        if ($duplicateCommentExists) {
+            throw ValidationException::withMessages([
+                'content' => 'This comment has already been submitted.',
+            ]);
+        }
+
+        return Comment::create([
+            'name' => $commentData['name'],
+            'email' => $commentData['email'],
+            'content' => $content,
+            'status' => 'pending',
+            'ip_address' => $ipAddress,
+            'user_id' => $user?->id,
+            'post_id' => $post->id,
+        ]);
+    }
+
     /**
      * Get a public article with its approved comments and related stories.
      *
