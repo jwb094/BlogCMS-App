@@ -86,6 +86,32 @@ The project is being used as a portfolio and learning application to build exper
 
 ---
 
+## 📸 Application Preview
+
+The screenshots below show the public blog on desktop and mobile, along with the desktop content-management dashboard.
+
+### Public Frontend
+
+**Desktop — home page**
+<p align="center">
+  <img src="doc/images/Screenshot%202026-11-13%20at%2011.01.56.png" alt="BlogCMS public home page on desktop" width="760" />
+</p>
+
+**Mobile — home page and article**
+<p align="center">
+  <img src="doc/images/Screenshot%202026-11-13%20at%2010.57.21.png" alt="BlogCMS public home page on mobile" width="280" />
+  <img src="doc/images/Screenshot%202026-11-13%20at%2010.57.41.png" alt="BlogCMS article page on mobile" width="280" />
+</p>
+
+### Backend Administration — Desktop
+
+<p align="center">
+  <img src="doc/images/Screenshot%202026-11-13%20at%2011.05.40.png" alt="BlogCMS admin dashboard on desktop" width="760" />
+  <img src="doc/images/Screenshot%202026-11-13%20at%2011.05.54.png" alt="BlogCMS post management page on desktop" width="760" />
+</p>
+
+---
+
 ## 🛠️ Technology Stack
 
 ### Backend
